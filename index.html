@@ -1,0 +1,166 @@
+<!doctype html> 
+<html lang="ms">
+<head>
+	<script src="res/odometer.min.js"></script>
+ 	<link rel="stylesheet" href="res/odometer-theme-default.css"/>
+
+<style>
+*{
+		margin: 0;padding: 0;box-sizing: border-box;
+		font-family: "Lexend Deca Light";
+}
+html{
+		font-size: 62.5%;
+}
+
+h2{ font-size: 3.2rem; color: #464646; margin: 2rem 0 1rem 0;}
+p{font-size: 1.7rem}
+section{
+		display: flex;
+		justify-content: space-around;
+		width: 100%;
+		align-items: center;
+}
+.counter{
+		text-align: center;
+}
+</style>	
+</head>	
+	
+
+<body onload="getStats()">
+<section>  
+   <div class="counter">
+		   <i class="fa-brands fa-3x fa-discord"></i>
+		   <h2 class="count odometer plus" id="sti" data-cousnt="">0</h2>
+		   <p>STI Organisastion</p>
+   </div>
+   
+   <div class="counter">
+		   <i class="fa steadysets-icon-graph fa-3x"></i>
+		   <h2 class="count odometer plus" id="myhrsti" data-count="">0</h2>
+		   <p>MyHRSTI</p>
+   </div>
+  
+   <div class="counter">
+		   <i class="fa-brands fa-3x fa-youtube"></i>
+		   <h2 class="count odometer plus" id="nfse" data-count="">0</h2>
+		   <p>NSFE</p>
+   </div>
+   
+   <div class="counter">
+		  <i class="fa-brands fa-3x fa-youtube"></i>
+		  <h2 class="count odometer plus" id="rnd" data-count="">0</h2>
+		  <p>RnD Project Bank</p>
+  </div>
+  
+  <div class="counter">
+		  <i class="fa-brands fa-3x fa-youtube"></i>
+		  <h2 class="count odometer plus" id="techmart" data-count="">0</h2>
+		  <p>Techmart</p>
+  </div>
+  
+  <div class="counter">
+		  <i class="fa-brands fa-3x fa-youtube"></i>
+		  <h2 class="count odometer plus" id="sti_idicator" data-count="">0</h2>
+		  <p>STI Indicator</p>
+  </div>
+  
+</section>
+    
+<script> 
+
+	function renderHtml(data){
+		 
+		for (i=0;i< data.length;i++){
+			
+			let val_sti = data[i].STI_Organisation;
+			document.getElementById("sti").innerHTML = val_sti;
+			sti.setAttribute("data-count",val_sti);
+			
+			let val_MyHRSTI = data[i].MyHRSTI;
+			document.getElementById("myhrsti").innerHTML = val_MyHRSTI;
+			myhrsti.setAttribute("data-count",val_MyHRSTI);
+
+			let val_NSFE = data[i].NSFE;
+			document.getElementById("nfse").innerHTML = val_NSFE;
+			nfse.setAttribute("data-count",val_NSFE);
+			
+			let val_rnd = data[i].RnD_Project_Bank;
+			document.getElementById("rnd").innerHTML = val_rnd;
+			rnd.setAttribute("data-count",val_rnd);
+			
+			let val_techmart = data[i].Techmart;
+			document.getElementById("techmart").innerHTML = val_techmart;
+			techmart.setAttribute("data-count",val_techmart);
+			
+			let val_STI_Indicator = data[i].STI_Indicator;
+			document.getElementById("sti_idicator").innerHTML = val_STI_Indicator;
+			sti_idicator.setAttribute("data-count",val_STI_Indicator);
+
+			
+		}
+		
+	 
+	 		//start animation
+			const createOdometer = (el, value) => {
+  			const odometer = new Odometer({
+				el: el,
+				value: 0,
+  			});
+			
+  			let hasRun = false;
+			
+  			const options = {
+				threshold: [0, 0.9],
+  			};
+			
+  			const callback = (entries, observer) => {
+				entries.forEach((entry) => {
+	  			if (entry.isIntersecting) {
+					if (!hasRun) {
+		  			odometer.update(value);
+		  			hasRun = true;
+					}
+	  			}
+				});
+  			};
+			
+  			const observer = new IntersectionObserver(callback, options);
+  			observer.observe(el);
+			};
+			//end animation
+  
+	}
+	
+	 
+	function getStats(){
+		 var ourRequest = new XMLHttpRequest();
+
+		 ourRequest.open('GET', 'stat.json');
+		 
+		 ourRequest.onload = function(){
+		 
+			 if (ourRequest.status >=200 && ourRequest.status<400){
+				 var ourData= JSON.parse(ourRequest.responseText);
+				 renderHtml(ourData);	
+			 }
+			 else {
+				 console.log('We connected to the server but it returned an error');
+			 }
+		 
+		 };
+		 
+		 ourRequest.onerror = function(){
+			 console.log('Connection Error');
+		 };
+		 
+		 
+		 ourRequest.send();
+		 
+	} 
+</script>
+
+
+</body>
+</html>
